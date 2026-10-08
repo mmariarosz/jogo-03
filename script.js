@@ -44,7 +44,7 @@ let faseAtual = 0;
 let respondida = false;
 
 let timer;
-let tempo = 10;
+let tempo = 30;
 
 let bossVida = 100;
 
