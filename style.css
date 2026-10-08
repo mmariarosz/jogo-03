@@ -736,3 +736,13 @@ footer {
         font-size: .7rem;
     }
 }
+footer span {
+    display: block;
+    margin-top: 6px;
+    color: var(--rosa);
+    font-family: "Press Start 2P", cursive;
+    font-size: 0.55rem;
+    text-shadow:
+        0 0 5px var(--rosa),
+        0 0 12px var(--rosa);
+}
