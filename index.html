@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NEON MATH - Arcade 86</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="scanlines"></div>
+
+    <!-- TELA INICIAL -->
+    <header id="inicio" class="tela ativa">
+
+        <div class="arcade">
+
+            <div class="logo">
+                <span>NEON</span>
+                <strong>MATH</strong>
+                <small>★ ARCADE 86 ★</small>
+            </div>
+
+            <div class="coin">🪙</div>
+
+            <h1>DESAFIO MATEMÁTICO</h1>
+
+            <p class="insert">INSERT COIN TO PLAY</p>
+
+            <button id="btnStart" class="btn-neon">
+                ▶ START GAME
+            </button>
+
+            <div class="decoracao">
+                <span>★</span>
+                <span>◆</span>
+                <span>★</span>
+                <span>◆</span>
+                <span>★</span>
+            </div>
+
+            <p class="instrucao">
+                Use seu raciocínio e conquiste a maior pontuação!
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <!-- JOGO -->
+    <main id="jogo" class="tela">
+
+        <div class="game-container">
+
+            <!-- HUD -->
+            <section class="hud">
+
+                <div>
+                    <span>PLAYER</span>
+                    <strong>MARIA</strong>
+                </div>
+
+                <div>
+                    <span>SCORE</span>
+                    <strong id="score">0000</strong>
+                </div>
+
+                <div>
+                    <span>COINS</span>
+                    <strong id="coins">000</strong>
+                </div>
+
+                <div>
+                    <span>VIDAS</span>
+                    <strong id="lives">❤️❤️❤️</strong>
+                </div>
+
+            </section>
+
+
+            <!-- PROGRESSO -->
+            <section class="progress-section">
+
+                <p id="faseNome">FASE 1 - QUICK MATH</p>
+
+                <div class="progress-bar">
+                    <div id="progress"></div>
+                </div>
+
+            </section>
+
+
+            <!-- FASE -->
+            <section id="fase" class="fase-card">
+
+                <!-- conteúdo inserido pelo JavaScript -->
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- TELA FINAL -->
+    <section id="final" class="tela">
+
+        <div class="final-card">
+
+            <div class="game-over">
+                GAME OVER
+            </div>
+
+            <h2>🏆 RESULTADO FINAL 🏆</h2>
+
+            <div class="trofeu">👾</div>
+
+            <div class="resultado">
+
+                <p>
+                    SCORE
+                    <strong id="finalScore">0000</strong>
+                </p>
+
+                <p>
+                    COINS
+                    <strong id="finalCoins">000</strong>
+                </p>
+
+                <p>
+                    ACERTOS
+                    <strong id="finalAcertos">0</strong>
+                </p>
+
+            </div>
+
+            <div id="rank" class="rank">
+                MATH MASTER
+            </div>
+
+            <button id="btnRestart" class="btn-neon">
+                🔄 JOGAR NOVAMENTE
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+        <p>NEON MATH © 1986 • DESAFIO PARA O 6º ANO</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
