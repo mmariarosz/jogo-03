@@ -434,178 +434,121 @@ function faseNeonRun() {
 
 
 // ===============================
-// FASE 4
-// JOGO DA MEMÓRIA
+// MEMORY GLITCH
 // ===============================
 
-function faseMemoria() {
+const paresMemoria = [
+    { pergunta: "6 + 6", resposta: "12" },
+    { pergunta: "12", resposta: "6 + 6" },
 
-    faseNome.textContent = "FASE 4 - MEMORY GLITCH 🧩";
+    { pergunta: "12 × 2", resposta: "24" },
+    { pergunta: "24", resposta: "12 × 2" },
 
-    cartasAbertas = [];
+    { pergunta: "6 × 1", resposta: "6" },
+    { pergunta: "6", resposta: "6 × 1" },
+
+    { pergunta: "6 × 6", resposta: "36" },
+    { pergunta: "36", resposta: "6 × 6" }
+];
+
+let primeiraCarta = null;
+let segundaCarta = null;
+let bloqueado = false;
+let paresEncontrados = 0;
+
+function iniciarMemoria() {
+    const tabuleiro = document.getElementById("memory-board");
+
+    if (!tabuleiro) return;
+
+    tabuleiro.innerHTML = "";
+    primeiraCarta = null;
+    segundaCarta = null;
+    bloqueado = false;
     paresEncontrados = 0;
 
-    const cartas = [
-        "12",
-        "24",
-        "6",
-        "36",
-        "12 × 2",
-        "6 × 1",
-        "6 × 6",
-        "6 + 6"
-    ];
+    // Embaralha as cartas
+    const cartas = [...paresMemoria].sort(() => Math.random() - 0.5);
 
-    // embaralhar
-    cartas.sort(() => Math.random() - 0.5);
+    cartas.forEach((carta, index) => {
+        const elemento = document.createElement("button");
 
-    fase.innerHTML = `
-        <h2>🧩 MEMORY GLITCH 🧩</h2>
+        elemento.classList.add("memory-card");
+        elemento.dataset.valor = carta.resposta;
+        elemento.dataset.id = index;
 
-        <p class="pergunta">
-            Encontre os pares matemáticos!
-        </p>
+        elemento.innerHTML = `
+            <span class="card-front">?</span>
+            <span class="card-back">${carta.pergunta}</span>
+        `;
 
-        <div class="memoria" id="memoria"></div>
+        elemento.addEventListener("click", () => virarCarta(elemento));
 
-        <div id="feedback" class="feedback">
-            Encontre os pares!
-        </div>
-    `;
-
-    const memoria = document.getElementById("memoria");
-
-    cartas.forEach((valor, index) => {
-
-        const carta = document.createElement("div");
-
-        carta.classList.add("carta");
-
-        carta.dataset.valor = valor;
-        carta.dataset.index = index;
-
-        carta.textContent = "?";
-
-        carta.addEventListener("click", () => {
-
-            virarCarta(carta);
-
-        });
-
-        memoria.appendChild(carta);
-
+        tabuleiro.appendChild(elemento);
     });
 }
 
-
 function virarCarta(carta) {
-
     if (
-        carta.classList.contains("aberta") ||
-        carta.classList.contains("encontrada") ||
-        cartasAbertas.length >= 2
+        bloqueado ||
+        carta.classList.contains("virada") ||
+        carta.classList.contains("encontrada")
     ) {
         return;
     }
 
-    carta.classList.add("aberta");
+    carta.classList.add("virada");
 
-    carta.textContent = carta.dataset.valor;
-
-    cartasAbertas.push(carta);
-
-    if (cartasAbertas.length === 2) {
-
-        setTimeout(verificarPar, 700);
+    if (!primeiraCarta) {
+        primeiraCarta = carta;
+        return;
     }
+
+    segundaCarta = carta;
+    bloqueado = true;
+
+    verificarParMemoria();
 }
 
+function verificarParMemoria() {
+    const valor1 = primeiraCarta.dataset.valor;
+    const valor2 = segundaCarta.querySelector(".card-back").textContent;
 
-function verificarPar() {
+    const resultado1 = primeiraCarta.querySelector(".card-back").textContent;
 
-    const [carta1, carta2] = cartasAbertas;
+    const acertou =
+        (resultado1 === valor2) ||
+        (segundaCarta.dataset.valor === resultado1);
 
-    const valor1 = carta1.dataset.valor;
-    const valor2 = carta2.dataset.valor;
-
-    let par = false;
-
-
-    // pares válidos
-    if (
-        (valor1 === "12" && valor2 === "12 × 2") ||
-        (valor2 === "12" && valor1 === "12 × 2")
-    ) {
-        par = true;
-    }
-
-    if (
-        (valor1 === "6" && valor2 === "6 × 1") ||
-        (valor2 === "6" && valor1 === "6 × 1")
-    ) {
-        par = true;
-    }
-
-    if (
-        (valor1 === "36" && valor2 === "6 × 6") ||
-        (valor2 === "36" && valor1 === "6 × 6")
-    ) {
-        par = true;
-    }
-
-    if (
-        (valor1 === "24" && valor2 === "6 + 6") ||
-        (valor2 === "24" && valor1 === "6 + 6")
-    ) {
-        par = true;
-    }
-
-
-    if (par) {
-
-        carta1.classList.add("encontrada");
-        carta2.classList.add("encontrada");
+    if (acertou) {
+        primeiraCarta.classList.add("encontrada");
+        segundaCarta.classList.add("encontrada");
 
         paresEncontrados++;
 
-        ganharPontos(100);
+        atualizarPlacar(10);
 
-        mostrarFeedback(
-            "🧩 PAR ENCONTRADO! +100 XP",
-            true
-        );
+        primeiraCarta = null;
+        segundaCarta = null;
+        bloqueado = false;
 
         if (paresEncontrados === 4) {
-
-            mostrarFeedback(
-                "🏆 MEMORY MASTER! FASE COMPLETA!",
-                true
-            );
-
             setTimeout(() => {
-
-                faseAtual++;
-
-                carregarFase();
-
-            }, 1500);
+                alert("🎉 VOCÊ ENCONTROU TODOS OS PARES!");
+                proximaFase();
+            }, 500);
         }
 
     } else {
+        setTimeout(() => {
+            primeiraCarta.classList.remove("virada");
+            segundaCarta.classList.remove("virada");
 
-        carta1.classList.remove("aberta");
-        carta2.classList.remove("aberta");
-
-        carta1.textContent = "?";
-        carta2.textContent = "?";
-
-        mostrarFeedback(
-            "❌ Não formou um par!",
-            false
-        );
+            primeiraCarta = null;
+            segundaCarta = null;
+            bloqueado = false;
+        }, 1000);
     }
-
-    cartasAbertas = [];
 }
 
 
